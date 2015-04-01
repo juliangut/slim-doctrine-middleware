@@ -1,0 +1,42 @@
+{
+    "name": "juliangut/slim-doctrine-middleware",
+    "description": "Slim Framework Doctrine middleware",
+    "keywords": [
+        "slim",
+        "framework",
+        "middleware",
+        "doctrine",
+        "handler"
+    ],
+    "homepage": "http://github.com/juliangut/slim-doctrine-middleware",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Julián Gutiérrez",
+            "email": "juliangut@gmail.com",
+            "homepage": "http://juliangut.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "slim/slim": "~2.5",
+        "doctrine/orm": "~2.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.5",
+        "squizlabs/php_codesniffer": "~2",
+        "phpmd/phpmd": "~2.2",
+        "sebastian/phpcpd": "~2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jgut\\Slim\\Middleware\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jgut\\Slim\\MiddlewareTests\\": "tests/MiddlewareTests/"
+        }
+    }
+}
