@@ -22,13 +22,7 @@ class DoctrineMiddleware extends Middleware
     /**
      * @var array
      */
-    protected $options = [
-        'connection'             => null,
-        'annotation_paths'       => null,
-        'annotation_files'       => [],
-        'annotation_namespaces'  => [],
-        'annotation_autoloaders' => [],
-    ];
+    protected $options = [];
 
      /**
      * Check option availavility
@@ -100,7 +94,7 @@ class DoctrineMiddleware extends Middleware
 
         $options = $app->config('doctrine');
         if (is_array($options)) {
-            $this->setOptions($options, $this->options);
+            $this->setOptions($this->options, $options);
         }
 
         foreach ($this->getOption('annotation_files') as $file) {
@@ -129,6 +123,7 @@ class DoctrineMiddleware extends Middleware
         $config->setMetadataDriverImpl($config->newDefaultAnnotationDriver($annotationPaths, false));
 
         $connection = $this->getOption('connection');
+
         $app->container->singleton(
             'entity_manager',
             function () use ($connection, $config) {

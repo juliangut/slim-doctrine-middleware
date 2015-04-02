@@ -58,9 +58,9 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->middleware->getOption('connection'));
         $this->assertNull($this->middleware->getOption('annotation_paths'));
-        $this->assertEquals([], $this->middleware->getOption('annotation_files'));
-        $this->assertEquals([], $this->middleware->getOption('annotation_namespaces'));
-        $this->assertEquals([], $this->middleware->getOption('annotation_autoloaders'));
+        $this->assertNull($this->middleware->getOption('annotation_files'));
+        $this->assertNull($this->middleware->getOption('annotation_namespaces'));
+        $this->assertNull($this->middleware->getOption('annotation_autoloaders'));
     }
 
     /**
@@ -98,7 +98,7 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
         $app->container = $container;
         $this->middleware->setApplication($app);
 
-        $this->middleware->setOption('annotation_paths', 'sg');
+        $this->middleware->setOption('annotation_paths', 'ficticious path');
         $this->middleware->setup();
 
         $this->assertInstanceOf('Doctrine\\ORM\\EntityManager', $container->get('entity_manager'));
