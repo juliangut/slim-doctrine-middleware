@@ -101,6 +101,6 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->middleware->setOption('annotation_paths', 'ficticious path');
         $this->middleware->setup();
 
-        $this->assertInstanceOf('Doctrine\\ORM\\EntityManager', $container->get('entity_manager'));
+        $this->assertInstanceOf('Doctrine\\ORM\\EntityManager', $container->entityManager);
     }
 }

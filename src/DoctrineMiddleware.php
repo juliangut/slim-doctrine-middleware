@@ -125,7 +125,7 @@ class DoctrineMiddleware extends Middleware
         $connection = $this->getOption('connection');
 
         $app->container->singleton(
-            'entity_manager',
+            'entityManager',
             function () use ($connection, $config) {
                 return EntityManager::create($connection, $config);
             }
