@@ -25,7 +25,61 @@ require_once './vendor/autoload.php';
 
 ## Usage
 
-Add as middleware.
+Just add as any other middleware.
+
+```php
+use Slim\Slim;
+use Jgut\Slim\Middleware\DoctrineMiddleware;
+
+$app = new Slim();
+
+...
+
+$app->add(new DoctrineMiddleware());
+```
+
+### Configuration
+
+There are two ways to configure Doctrine Middleware
+
+First by using `doctrine` key in Slim application configuration
+
+```php
+$config = [
+    'doctrine' => [
+        'connection' => [
+            'driver' => 'pdo_sqlite',
+            'memory' => true,
+        ],
+        'annotation_paths' => ['path_to_entities_files'],
+    ],
+];
+
+$app = new Slim($config);
+$app->add(new DoctrineMiddleware());
+```
+
+Second way is assigning options directly to Doctrine Middleware
+
+```php
+$app = new Slim();
+
+$doctrineMiddleware = new DoctrineMiddleware();
+$doctrineMiddleware->setOption(
+    'connection',
+    ['driver' => 'pdo_sqlite', 'memory' => true]
+);
+$doctrineMiddleware->setOption('annotation_paths', ['path_to_entities_files']);
+$app->add($doctrineMiddleware);
+```
+
+### Available configurations
+
+* `connection` array of PDO configurations
+* `annotation_paths` array of paths where to find entities files
+* `annotation_files` array of Doctrine annotations files
+* `annotation_namespaces` array of Doctrine annotations namespaces
+* `annotation_autoloaders` array of Doctrine annotations utoloaders
 
 ## License
 
