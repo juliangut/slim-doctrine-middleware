@@ -97,15 +97,15 @@ class DoctrineMiddleware extends Middleware
             $this->setOptions($this->options, $options);
         }
 
-        foreach ($this->getOption('annotation_files') as $file) {
+        foreach ($this->getOption('annotation_files', []) as $file) {
             AnnotationRegistry::registerFile($file);
         }
 
-        foreach ($this->getOption('annotation_namespaces') as $namespaceMapping) {
+        foreach ($this->getOption('annotation_namespaces', []) as $namespaceMapping) {
             AnnotationRegistry::registerAutoloadNamespace(reset($namespaceMapping), end($namespaceMapping));
         }
 
-        foreach ($this->getOption('annotation_autoloaders') as $autoloader) {
+        foreach ($this->getOption('annotation_autoloaders', []) as $autoloader) {
             AnnotationRegistry::registerLoader($autoloader);
         }
 
