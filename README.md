@@ -81,6 +81,12 @@ $app->add($doctrineMiddleware);
 * `annotation_namespaces` array of Doctrine annotations namespaces
 * `annotation_autoloaders` array of Doctrine annotations utoloaders
 
+## Contributing
+
+Found a bug or have a feature request? [Please open a new issue](https://github.com/juliangut/slim-doctrine-middleware/issues). Have a look at existing issues before
+
+See file [CONTRIBUTING.md](https://github.com/juliangut/slim-doctrine-middleware/blob/master/CONTRIBUTING.md)
+
 ## License
 
 ### Release under BSD-3-Clause License.
