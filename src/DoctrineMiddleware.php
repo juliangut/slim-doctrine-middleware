@@ -112,6 +112,11 @@ class DoctrineMiddleware extends Middleware
         $config = Setup::createConfiguration(!!$app->config('debug'));
         $config->setNamingStrategy(new UnderscoreNamingStrategy(CASE_LOWER));
 
+        $proxy_path = $this->getOption('proxy_path');
+        if(!empty($proxy_path)) {
+            $config->setProxyDir($proxy_path);
+        }
+
         $annotationPaths = $this->getOption('annotation_paths');
         if (empty($annotationPaths)) {
             throw new \BadMethodCallException('annotation_paths config should be defined');
