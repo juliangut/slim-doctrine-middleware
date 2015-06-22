@@ -26,6 +26,7 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
         'annotation_files'       => [],
         'annotation_namespaces'  => [],
         'annotation_autoloaders' => [],
+        'proxy_path'             => '',
     ];
 
     public function setUp()
@@ -61,6 +62,7 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->middleware->getOption('annotation_files'));
         $this->assertNull($this->middleware->getOption('annotation_namespaces'));
         $this->assertNull($this->middleware->getOption('annotation_autoloaders'));
+        $this->assertNull($this->middleware->getOption('proxy_path'));
     }
 
     /**
