@@ -113,7 +113,7 @@ class DoctrineMiddleware extends Middleware
         $config->setNamingStrategy(new UnderscoreNamingStrategy(CASE_LOWER));
 
         $proxy_path = $this->getOption('proxy_path');
-        if(!empty($proxy_path)) {
+        if (!empty($proxy_path)) {
             $config->setProxyDir($proxy_path);
         }
 
