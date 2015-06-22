@@ -80,6 +80,7 @@ $app->add($doctrineMiddleware);
 * `annotation_files` array of Doctrine annotations files
 * `annotation_namespaces` array of Doctrine annotations namespaces
 * `annotation_autoloaders` array of Doctrine annotations utoloaders
+* `proxy_path` string, path were Doctrine creates it's proxy classes, defaults to /tmp
 
 ## Contributing
 
