@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": ">=5.4",
-        "slim/slim": "~2.4.3",
+        "slim/slim": ">=2.4.3",
         "doctrine/orm": "~2.4"
     },
     "require-dev": {
