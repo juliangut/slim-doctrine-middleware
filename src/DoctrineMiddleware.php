@@ -113,7 +113,7 @@ class DoctrineMiddleware extends Middleware
         if ($this->hasOption('proxy_path')) {
             $proxyDir = $this->getOption('proxy_path');
         }
-        
+
         $cache = $this->configureCache($this->getOption('cache_driver'));
 
         $config = Setup::createConfiguration(!!$app->config('debug'), $proxyDir, $cache);
@@ -141,9 +141,10 @@ class DoctrineMiddleware extends Middleware
 
     /**
      * @param array $cacheDriver
-     * @return \Doctrine\Common\Cache\CacheProvider
+     * @return \Doctrine\Common\Cache\CacheProvider|null
      */
-    public function configureCache($cacheDriver) {
+    public function configureCache($cacheDriver)
+    {
         $cache = null;
         switch (strtolower($cacheDriver['type'])) {
             case 'apc':
@@ -171,8 +172,9 @@ class DoctrineMiddleware extends Middleware
      * @param int $port
      * @return \Doctrine\Common\Cache\MemcacheCache
      */
-    private function configureMemcacheCache($host = '127.0.0.1', $port = 11211) {
-        if(extension_loaded('memcache')) {
+    private function configureMemcacheCache($host = '127.0.0.1', $port = 11211)
+    {
+        if (extension_loaded('memcache')) {
             $memcache = new \Memcache();
             $memcache->addserver($host, $port);
 
@@ -189,8 +191,9 @@ class DoctrineMiddleware extends Middleware
      * @param int $port
      * @return \Doctrine\Common\Cache\RedisCache
      */
-    private function configureRedisCache($host = '127.0.0.1', $port = 6379) {
-        if(extension_loaded('redis')) {
+    private function configureRedisCache($host = '127.0.0.1', $port = 6379)
+    {
+        if (extension_loaded('redis')) {
             $redis = new \Redis();
             $redis->connect($host, $port);
 
