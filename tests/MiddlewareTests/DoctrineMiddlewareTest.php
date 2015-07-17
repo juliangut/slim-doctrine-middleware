@@ -121,16 +121,16 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     public function testCacheConfiguration()
     {
-        $this->assertNull($this->middleware->configureCache(array()));
+        $this->assertNull($this->middleware->configureCache(array('type' => '')));
         $this->assertInstanceOf('Doctrine\\Common\\Cache\\ApcCache', $this->middleware->configureCache(array('type' => 'apc')));
         $this->assertInstanceOf('Doctrine\\Common\\Cache\\XcacheCache', $this->middleware->configureCache(array('type' => 'xcache')));
 
         if(extension_loaded('memcache')) {
-            $this->assertInstanceOf('Doctrine\\Common\\Cache\\MemcacheCache', $this->middleware->configureCache(array('type' => 'memcache')));
+            $this->assertInstanceOf('Doctrine\\Common\\Cache\\MemcacheCache', $this->middleware->configureCache(array('type' => 'memcache', 'host' => '127.0.0.1', 'port' => 11211)));
         }
 
         if(extension_loaded('redis')) {
-            $this->assertInstanceOf('Doctrine\\Common\\Cache\\RedisCache', $this->middleware->configureCache(array('type' => 'redis')));
+            $this->assertInstanceOf('Doctrine\\Common\\Cache\\RedisCache', $this->middleware->configureCache(array('type' => 'redis', 'host' => '127.0.0.1', 'port' => 6379)));
         }
 
         $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $this->middleware->configureCache(array('type' => 'array')));
