@@ -26,6 +26,11 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
         'annotation_files'       => [],
         'annotation_namespaces'  => [],
         'annotation_autoloaders' => [],
+        'cache_driver'           => [
+            'type'  => '',
+            'host'  => '',
+            'port'  => '',
+        ],
         'proxy_path'             => '',
     ];
 
@@ -62,6 +67,7 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->middleware->getOption('annotation_files'));
         $this->assertNull($this->middleware->getOption('annotation_namespaces'));
         $this->assertNull($this->middleware->getOption('annotation_autoloaders'));
+        $this->assertNull($this->middleware->getOption('cache_driver'));
         $this->assertNull($this->middleware->getOption('proxy_path'));
     }
 
@@ -78,7 +84,11 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->middleware->setOption('annotation_paths', $expected);
 
         $this->assertEquals($expected, $this->middleware->getOption('annotation_paths'));
-    }
+
+        $this->middleware->setOption('proxy_path', $expected);
+
+        $this->assertEquals($expected, $this->middleware->getOption('proxy_path'))
+;    }
 
     /**
      * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setup
@@ -104,5 +114,25 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->middleware->setup();
 
         $this->assertInstanceOf('Doctrine\\ORM\\EntityManager', $container->entityManager);
+    }
+
+    /**
+     * @covers Jgut\Slim\Middleware\DoctrineMiddleware::configureCache
+     */
+    public function testCacheConfiguration()
+    {
+        $this->assertNull($this->middleware->configureCache(array()));
+        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ApcCache', $this->middleware->configureCache(array('type' => 'apc')));
+        $this->assertInstanceOf('Doctrine\\Common\\Cache\\XcacheCache', $this->middleware->configureCache(array('type' => 'xcache')));
+
+        if(extension_loaded('memcache')) {
+            $this->assertInstanceOf('Doctrine\\Common\\Cache\\MemcacheCache', $this->middleware->configureCache(array('type' => 'memcache')));
+        }
+
+        if(extension_loaded('redis')) {
+            $this->assertInstanceOf('Doctrine\\Common\\Cache\\RedisCache', $this->middleware->configureCache(array('type' => 'redis')));
+        }
+
+        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $this->middleware->configureCache(array('type' => 'array')));
     }
 }
