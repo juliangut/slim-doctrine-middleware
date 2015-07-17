@@ -113,56 +113,8 @@ class DoctrineMiddleware extends Middleware
         if ($this->hasOption('proxy_path')) {
             $proxyDir = $this->getOption('proxy_path');
         }
-
-        $cache_driver = $this->getOption('cache_driver');
-        $cache = null;
-        switch (strtolower($cache_driver['type'])) {
-            case 'apc':
-                if (extension_loaded('apc')) {
-                    $cache = new \Doctrine\Common\Cache\ApcCache();
-                } else {
-                    throw new \BadMethodCallException('ApcCache configured but module \'apc\' not loaded.');
-                }
-                break;
-            case 'xcache':
-                if (extension_loaded('xcache')) {
-                    $cache = new \Doctrine\Common\Cache\XcacheCache();
-                } else {
-                    throw new \BadMethodCallException('XcacheCache configured but module \'xcache\' not loaded.');
-                }
-                break;
-            case 'memcache':
-                if (extension_loaded('memcache')) {
-                    $memcache = new \Memcache();
-                    $memcache->addserver(
-                        (isset($cache_driver['host']) ? $cache_driver['host'] : '127.0.0.1'),
-                        (isset($cache_driver['port']) ? $cache_driver['port'] : 11211)
-                    );
-
-                    $cache = new \Doctrine\Common\Cache\MemcacheCache();
-                    $cache->setMemcache($memcache);
-                } else {
-                    throw new \BadMethodCallException('MemcacheCache configured but module \'memcache\' not loaded.');
-                }
-                break;
-            case 'redis':
-                if (extension_loaded('redis')) {
-                    $redis = new \Redis();
-                    $redis->connect(
-                        (isset($cache_driver['host']) ? $cache_driver['host'] : '127.0.0.1'),
-                        (isset($cache_driver['port']) ? $cache_driver['port'] : 6379)
-                    );
-
-                    $cache = new \Doctrine\Common\Cache\RedisCache();
-                    $cache->setRedis($redis);
-                } else {
-                    throw new \BadMethodCallException('RedisCache configured but module \'redis\' not loaded.');
-                }
-                break;
-            case 'array':
-                $cache = new \Doctrine\Common\Cache\ArrayCache();
-                break;
-        }
+        
+        $cache = $this->configureCache($this->getOption('cache_driver'));
 
         $config = Setup::createConfiguration(!!$app->config('debug'), $proxyDir, $cache);
         $config->setNamingStrategy(new UnderscoreNamingStrategy(CASE_LOWER));
@@ -186,4 +138,69 @@ class DoctrineMiddleware extends Middleware
             }
         );
     }
+
+    /**
+     * @param array $cacheDriver
+     * @return \Doctrine\Common\Cache\CacheProvider
+     */
+    public function configureCache($cacheDriver) {
+        $cache = null;
+        switch (strtolower($cacheDriver['type'])) {
+            case 'apc':
+                $cache = new \Doctrine\Common\Cache\ApcCache();
+                break;
+            case 'xcache':
+                $cache = new \Doctrine\Common\Cache\XcacheCache();
+                break;
+            case 'memcache':
+                $cache = $this->configureMemcacheCache($cacheDriver['host'], $cacheDriver['port']);
+                break;
+            case 'redis':
+                $cache = $this->configureRedisCache($cacheDriver['host'], $cacheDriver['port']);
+                break;
+            case 'array':
+                $cache = new \Doctrine\Common\Cache\ArrayCache();
+                break;
+        }
+
+        return $cache;
+    }
+
+    /**
+     * @param string $host
+     * @param int $port
+     * @return \Doctrine\Common\Cache\MemcacheCache
+     */
+    private function configureMemcacheCache($host = '127.0.0.1', $port = 11211) {
+        if(extension_loaded('memcache')) {
+            $memcache = new \Memcache();
+            $memcache->addserver($host, $port);
+
+            $cache = new \Doctrine\Common\Cache\MemcacheCache();
+            $cache->setMemcache($memcache);
+            return $cache;
+        } else {
+            throw new \BadMethodCallException('MemcacheCache configured but module \'memcache\' not loaded.');
+        }
+    }
+
+    /**
+     * @param string $host
+     * @param int $port
+     * @return \Doctrine\Common\Cache\RedisCache
+     */
+    private function configureRedisCache($host = '127.0.0.1', $port = 6379) {
+        if(extension_loaded('redis')) {
+            $redis = new \Redis();
+            $redis->connect($host, $port);
+
+            $cache = new \Doctrine\Common\Cache\RedisCache();
+            $cache->setRedis($redis);
+            return $cache;
+        } else {
+            throw new \BadMethodCallException('RedisCache configured but module \'redis\' not loaded.');
+        }
+    }
+
+
 }
