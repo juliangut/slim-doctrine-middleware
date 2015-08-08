@@ -109,11 +109,7 @@ class DoctrineMiddleware extends Middleware
             AnnotationRegistry::registerLoader($autoloader);
         }
 
-        $proxyDir = null;
-        if ($this->hasOption('proxy_path')) {
-            $proxyDir = $this->getOption('proxy_path');
-        }
-
+        $proxyDir = $this->getOption('proxy_path');
         $cache = $this->configureCache($this->getOption('cache_driver'));
 
         $config = Setup::createConfiguration(!!$app->config('debug'), $proxyDir, $cache);
