@@ -24,7 +24,7 @@ class DoctrineMiddleware extends Middleware
      */
     protected $options = [];
 
-     /**
+    /**
      * Check option availavility
      *
      * @param string $option
@@ -131,7 +131,7 @@ class DoctrineMiddleware extends Middleware
 
         $app->container->singleton(
             'entityManager',
-            function () use ($connection, $config) {
+            function() use ($connection, $config) {
                 return EntityManager::create($connection, $config);
             }
         );
