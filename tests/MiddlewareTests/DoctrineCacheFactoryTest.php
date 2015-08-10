@@ -31,25 +31,4 @@ class DoctrineCacheFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', DoctrineCacheFactory::configureCache(array('type' => 'array')));
     }
-
-    /**
-     * @expectedException \BadMethodCallException
-     */
-    public function testMemcacheCacheConfigurationException()
-    {
-        if (!extension_loaded('memcache')) {
-            $this->assertInstanceOf('Doctrine\\Common\\Cache\\MemcacheCache', DoctrineCacheFactory::configureCache(array('type' => 'memcache', 'host' => '127.0.0.1', 'port' => 11211)));
-        }
-    }
-
-    /**
-     * @expectedException \BadMethodCallException
-     */
-    public function testRedisCacheConfigurationException()
-    {
-        if(!extension_loaded('redis')) {
-            $this->assertInstanceOf('Doctrine\\Common\\Cache\\RedisCache', DoctrineCacheFactory::configureCache(array('type' => 'redis', 'host' => '127.0.0.1', 'port' => 6379)));
-        }
-    }
-
 }
