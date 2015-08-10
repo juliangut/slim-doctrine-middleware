@@ -79,7 +79,11 @@ $app->add($doctrineMiddleware);
 * `annotation_paths` array of paths where to find entities files
 * `annotation_files` array of Doctrine annotations files
 * `annotation_namespaces` array of Doctrine annotations namespaces
-* `annotation_autoloaders` array of Doctrine annotations utoloaders
+* `annotation_autoloaders` array of Doctrine annotations autoloaders
+* `cache_driver` array, configuration of Doctrine cache
+    * `type` type of cache you want to use, available types: `apc`, `xcache`, `memcache`, `redis`, `array`
+    * `host` host of the caching daemon, needed for `memcache`, `redis`, defaults to '127.0.0.1'
+    * `port` port of the caching daemon, optional, available for `memcache` (defaults to 11211), `redis` (defaults to 6379)
 * `proxy_path` string, path were Doctrine creates it's proxy classes, defaults to /tmp
 
 ## Contributing

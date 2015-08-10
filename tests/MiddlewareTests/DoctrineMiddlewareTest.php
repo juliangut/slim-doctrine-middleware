@@ -26,6 +26,11 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
         'annotation_files'       => [],
         'annotation_namespaces'  => [],
         'annotation_autoloaders' => [],
+        'cache_driver'           => [
+            'type'  => '',
+            'host'  => '',
+            'port'  => '',
+        ],
         'proxy_path'             => '',
     ];
 
@@ -62,6 +67,7 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->middleware->getOption('annotation_files'));
         $this->assertNull($this->middleware->getOption('annotation_namespaces'));
         $this->assertNull($this->middleware->getOption('annotation_autoloaders'));
+        $this->assertNull($this->middleware->getOption('cache_driver'));
         $this->assertNull($this->middleware->getOption('proxy_path'));
     }
 
@@ -78,7 +84,11 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->middleware->setOption('annotation_paths', $expected);
 
         $this->assertEquals($expected, $this->middleware->getOption('annotation_paths'));
-    }
+
+        $this->middleware->setOption('proxy_path', $expected);
+
+        $this->assertEquals($expected, $this->middleware->getOption('proxy_path'))
+;    }
 
     /**
      * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setup

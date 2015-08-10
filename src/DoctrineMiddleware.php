@@ -109,13 +109,11 @@ class DoctrineMiddleware extends Middleware
             AnnotationRegistry::registerLoader($autoloader);
         }
 
-        $config = Setup::createConfiguration(!!$app->config('debug'));
-        $config->setNamingStrategy(new UnderscoreNamingStrategy(CASE_LOWER));
+        $proxyDir = $this->getOption('proxy_path');
+        $cache = DoctrineCacheFactory::configureCache($this->getOption('cache_driver'));
 
-        $proxy_path = $this->getOption('proxy_path');
-        if (!empty($proxy_path)) {
-            $config->setProxyDir($proxy_path);
-        }
+        $config = Setup::createConfiguration(!!$app->config('debug'), $proxyDir, $cache);
+        $config->setNamingStrategy(new UnderscoreNamingStrategy(CASE_LOWER));
 
         $annotationPaths = $this->getOption('annotation_paths');
         if (empty($annotationPaths)) {
