@@ -43,7 +43,7 @@ class DoctrineCacheFactory
      * @param int $port
      * @return \Doctrine\Common\Cache\MemcacheCache
      */
-    private function configureMemcacheCache($host = '127.0.0.1', $port = 11211)
+    private static function configureMemcacheCache($host = '127.0.0.1', $port = 11211)
     {
         if (extension_loaded('memcache')) {
             $memcache = new \Memcache();
@@ -62,7 +62,7 @@ class DoctrineCacheFactory
      * @param int $port
      * @return \Doctrine\Common\Cache\RedisCache
      */
-    private function configureRedisCache($host = '127.0.0.1', $port = 6379)
+    private static function configureRedisCache($host = '127.0.0.1', $port = 6379)
     {
         if (extension_loaded('redis')) {
             $redis = new \Redis();
