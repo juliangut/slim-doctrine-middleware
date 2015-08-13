@@ -121,7 +121,7 @@ class DoctrineMiddleware extends Middleware
         }
 
         if (!is_array($annotationPaths)) {
-            $annotationPaths = array($annotationPaths);
+            $annotationPaths = [$annotationPaths];
         }
         $config->setMetadataDriverImpl($config->newDefaultAnnotationDriver($annotationPaths, false));
 
@@ -129,7 +129,7 @@ class DoctrineMiddleware extends Middleware
 
         $app->container->singleton(
             'entityManager',
-            function() use ($connection, $config) {
+            function () use ($connection, $config) {
                 return EntityManager::create($connection, $config);
             }
         );

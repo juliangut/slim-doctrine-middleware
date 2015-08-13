@@ -1,41 +1,73 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: mcrauwel
- * Date: 10/08/15
- * Time: 16:19
+ * Slim Framework Doctrine middleware (https://github.com/juliangut/slim-doctrine-middleware)
+ *
+ * @link https://github.com/juliangut/slim-doctrine-middleware for the canonical source repository
+ * @license https://raw.githubusercontent.com/juliangut/slim-doctrine-middleware/master/LICENSE
  */
 
 namespace MiddlewareTests;
 
-
 use Jgut\Slim\Middleware\DoctrineCacheFactory;
 
-class DoctrineCacheFactoryTest extends \PHPUnit_Framework_TestCase {
+class DoctrineCacheFactoryTest extends \PHPUnit_Framework_TestCase
+{
     /**
      * @covers Jgut\Slim\Middleware\DoctrineCacheFactory::configureCache
      */
     public function testCacheConfiguration()
     {
-        $this->assertNull(DoctrineCacheFactory::configureCache(array('type' => '')));
-        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ApcCache', DoctrineCacheFactory::configureCache(array('type' => 'apc')));
-        $this->assertInstanceOf('Doctrine\\Common\\Cache\\XcacheCache', DoctrineCacheFactory::configureCache(array('type' => 'xcache')));
-        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', DoctrineCacheFactory::configureCache(array('type' => 'array')));
+        $this->assertNull(DoctrineCacheFactory::configureCache(['type' => '']));
+        $this->assertInstanceOf(
+            'Doctrine\\Common\\Cache\\ApcCache',
+            DoctrineCacheFactory::configureCache(['type' => 'apc'])
+        );
+        $this->assertInstanceOf(
+            'Doctrine\\Common\\Cache\\XcacheCache',
+            DoctrineCacheFactory::configureCache(['type' => 'xcache'])
+        );
+        $this->assertInstanceOf(
+            'Doctrine\\Common\\Cache\\ArrayCache',
+            DoctrineCacheFactory::configureCache(['type' => 'array'])
+        );
     }
 
-    public function testMemcacheCacheConfiguration() {
-        if(!extension_loaded('memcache')) {
-            $this->setExpectedException('\BadMethodCallException', 'MemcacheCache configured but module \'memcache\' not loaded.');
+    /**
+     * @covers Jgut\Slim\Middleware\DoctrineCacheFactory::configureCache
+     * @covers Jgut\Slim\Middleware\DoctrineCacheFactory::configureMemcacheCache
+     */
+    public function testMemcacheCacheConfiguration()
+    {
+        if (!extension_loaded('memcache')) {
+            $this->setExpectedException(
+                '\BadMethodCallException',
+                'MemcacheCache configured but module \'memcache\' not loaded.'
+            );
         }
-        $this->assertInstanceOf('Doctrine\\Common\\Cache\\MemcacheCache', DoctrineCacheFactory::configureCache(array('type' => 'memcache', 'host' => '127.0.0.1', 'port' => 11211)));
+
+        $this->assertInstanceOf(
+            'Doctrine\\Common\\Cache\\MemcacheCache',
+            DoctrineCacheFactory::configureCache(['type' => 'memcache', 'host' => '127.0.0.1', 'port' => 11211])
+        );
 
     }
 
-    public function testRedisCacheConfiguration() {
-        if(!extension_loaded('redis')) {
-            $this->setExpectedException('\BadMethodCallException', 'RedisCache configured but module \'redis\' not loaded.');
+    /**
+     * @covers Jgut\Slim\Middleware\DoctrineCacheFactory::configureCache
+     * @covers Jgut\Slim\Middleware\DoctrineCacheFactory::configureRedisCache
+     */
+    public function testRedisCacheConfiguration()
+    {
+        if (!extension_loaded('redis')) {
+            $this->setExpectedException(
+                '\BadMethodCallException',
+                'RedisCache configured but module \'redis\' not loaded.'
+            );
         }
-        $this->assertInstanceOf('Doctrine\\Common\\Cache\\RedisCache', DoctrineCacheFactory::configureCache(array('type' => 'redis', 'host' => '127.0.0.1', 'port' => 6379)));
 
+        $this->assertInstanceOf(
+            'Doctrine\\Common\\Cache\\RedisCache',
+            DoctrineCacheFactory::configureCache(['type' => 'redis', 'host' => '127.0.0.1', 'port' => 6379])
+        );
     }
 }

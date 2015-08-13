@@ -87,8 +87,8 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $this->middleware->setOption('proxy_path', $expected);
 
-        $this->assertEquals($expected, $this->middleware->getOption('proxy_path'))
-;    }
+        $this->assertEquals($expected, $this->middleware->getOption('proxy_path'));
+    }
 
     /**
      * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setup
