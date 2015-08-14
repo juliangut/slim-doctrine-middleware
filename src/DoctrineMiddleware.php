@@ -113,7 +113,7 @@ class DoctrineMiddleware extends Middleware
         $cache = DoctrineCacheFactory::configureCache($this->getOption('cache_driver'));
 
         $config = Setup::createConfiguration(!!$app->config('debug'), $proxyDir, $cache);
-        $config->setNamingStrategy(new UnderscoreNamingStrategy(CASE_LOWER));
+        $config->setNamingStrategy(new UnderscoreNamingStrategy());
 
         $annotationPaths = $this->getOption('annotation_paths');
         if (empty($annotationPaths)) {
