@@ -9,8 +9,11 @@
 namespace Jgut\Slim\Middleware;
 
 use Slim\Middleware;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\Configuration;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\ORM\Mapping\Driver\XmlDriver;
+use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\ORM\EntityManager;
 
@@ -87,6 +90,8 @@ class DoctrineMiddleware extends Middleware
 
     /**
      * Set up Doctrine Entity Manager Slim service
+     *
+     * @throws \RuntimeException
      */
     public function setup()
     {
@@ -97,33 +102,17 @@ class DoctrineMiddleware extends Middleware
             $this->setOptions($this->options, $options);
         }
 
-        foreach ($this->getOption('annotation_files', []) as $file) {
-            AnnotationRegistry::registerFile($file);
-        }
-
-        foreach ($this->getOption('annotation_namespaces', []) as $namespaceMapping) {
-            AnnotationRegistry::registerAutoloadNamespace(reset($namespaceMapping), end($namespaceMapping));
-        }
-
-        foreach ($this->getOption('annotation_autoloaders', []) as $autoloader) {
-            AnnotationRegistry::registerLoader($autoloader);
-        }
-
         $proxyDir = $this->getOption('proxy_path');
         $cache = DoctrineCacheFactory::configureCache($this->getOption('cache_driver'));
 
         $config = Setup::createConfiguration(!!$app->config('debug'), $proxyDir, $cache);
         $config->setNamingStrategy(new UnderscoreNamingStrategy());
 
-        $annotationPaths = $this->getOption('annotation_paths');
-        if (empty($annotationPaths)) {
-            throw new \BadMethodCallException('annotation_paths config should be defined');
-        }
+        $this->setupAnnotationMetadata();
 
-        if (!is_array($annotationPaths)) {
-            $annotationPaths = [$annotationPaths];
+        if (!$this->setupMetadataDriver($config)) {
+            throw new \RuntimeException('No Metadata Driver defined');
         }
-        $config->setMetadataDriverImpl($config->newDefaultAnnotationDriver($annotationPaths, false));
 
         $connection = $this->getOption('connection');
 
@@ -133,5 +122,81 @@ class DoctrineMiddleware extends Middleware
                 return EntityManager::create($connection, $config);
             }
         );
+    }
+
+    /**
+     * Set up annotation metadata
+     */
+    private function setupAnnotationMetadata()
+    {
+        $annotationFiles = $this->getOption('annotation_files');
+        if ($annotationFiles) {
+            if (!is_array($annotationFiles)) {
+                $annotationFiles = [$annotationFiles];
+            }
+
+            foreach ($annotationFiles as $file) {
+                AnnotationRegistry::registerFile($file);
+            }
+        }
+
+        $annotationNamespaces = $this->getOption('annotation_namespaces');
+        if ($annotationNamespaces) {
+            if (!is_array($annotationNamespaces)) {
+                $annotationNamespaces = [$annotationNamespaces];
+            }
+
+            AnnotationRegistry::registerAutoloadNamespaces($annotationNamespaces);
+        }
+
+        $annotationAuloaders = $this->getOption('annotation_autoloaders');
+        if ($annotationAuloaders) {
+            if (!is_array($annotationAuloaders)) {
+                $annotationAuloaders = [$annotationAuloaders];
+            }
+
+            foreach ($annotationAuloaders as $autoloader) {
+                AnnotationRegistry::registerLoader($autoloader);
+            }
+        }
+    }
+
+    /**
+     * Set up annotation metadata
+     *
+     * @param \Doctrine\ORM\Configuration $config
+     *
+     * @return bool
+     */
+    private function setupMetadataDriver(Configuration &$config)
+    {
+        $annotationPaths = $this->getOption('annotation_paths');
+        if ($annotationPaths) {
+            if (!is_array($annotationPaths)) {
+                $annotationPaths = [$annotationPaths];
+            }
+
+            $config->setMetadataDriverImpl($config->newDefaultAnnotationDriver($annotationPaths, false));
+        }
+
+        $xmlPaths = $this->getOption('xml_paths');
+        if ($xmlPaths) {
+            if (!is_array($xmlPaths)) {
+                $xmlPaths = [$xmlPaths];
+            }
+
+            $config->setMetadataDriverImpl(new XmlDriver($xmlPaths));
+        }
+
+        $yamlPaths = $this->getOption('yaml_paths');
+        if ($yamlPaths) {
+            if (!is_array($yamlPaths)) {
+                $yamlPaths = [$yamlPaths];
+            }
+
+            $config->setMetadataDriverImpl(new YamlDriver($yamlPaths));
+        }
+
+        return $annotationPaths || $xmlPaths || $yamlPaths;
     }
 }

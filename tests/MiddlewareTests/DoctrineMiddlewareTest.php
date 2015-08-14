@@ -16,6 +16,8 @@ use Slim\Helper\Set;
  */
 class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
+    protected $container;
+
     protected $middleware;
 
     protected $doctrineConfig = [
@@ -23,15 +25,12 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
             'driver' => 'pdo_sqlite',
             'memory' => true,
         ],
-        'annotation_files'       => [],
-        'annotation_namespaces'  => [],
-        'annotation_autoloaders' => [],
+        'proxy_path'             => '',
         'cache_driver'           => [
             'type'  => '',
             'host'  => '',
             'port'  => '',
         ],
-        'proxy_path'             => '',
     ];
 
     public function setUp()
@@ -52,6 +51,9 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
                 }
             )
         );
+
+        $this->container = new Set();
+        $app->container = $this->container;
 
         $this->middleware->setApplication($app);
     }
@@ -84,35 +86,99 @@ class DoctrineMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->middleware->setOption('annotation_paths', $expected);
 
         $this->assertEquals($expected, $this->middleware->getOption('annotation_paths'));
-
-        $this->middleware->setOption('proxy_path', $expected);
-
-        $this->assertEquals($expected, $this->middleware->getOption('proxy_path'));
     }
 
     /**
      * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setup
-     * @expectedException \BadMethodCallException
+     * @expectedException \RuntimeException
      */
-    public function testSetupNoPath()
+    public function testSetupNoMetadataDriver()
     {
         $this->middleware->setup();
     }
 
     /**
      * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setup
+     * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setupAnnotationMetadata
      */
-    public function testSetup()
+    public function testAnnotationFilesSetup()
     {
-        $container = new Set();
-
-        $app = $this->middleware->getApplication();
-        $app->container = $container;
-        $this->middleware->setApplication($app);
-
+        $this->middleware->setOption('annotation_files', dirname(__DIR__) . '/files/fakeAnnotationFile.php');
         $this->middleware->setOption('annotation_paths', 'ficticious path');
+
         $this->middleware->setup();
 
-        $this->assertInstanceOf('Doctrine\\ORM\\EntityManager', $container->entityManager);
+        $this->assertInstanceOf('Doctrine\\ORM\\EntityManager', $this->container->entityManager);
+    }
+
+    /**
+     * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setup
+     * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setupAnnotationMetadata
+     */
+    public function testAnnotationNamespacesSetup()
+    {
+        $this->middleware->setOption('annotation_namespaces', 'Fake\\Namespace');
+        $this->middleware->setOption('annotation_paths', 'ficticious path');
+
+        $this->middleware->setup();
+
+        $this->assertInstanceOf('Doctrine\\ORM\\EntityManager', $this->container->entityManager);
+    }
+
+    /**
+     * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setup
+     * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setupAnnotationMetadata
+     */
+    public function testAnnotationAutoloadersSetup()
+    {
+        $this->middleware->setOption(
+            'annotation_autoloaders',
+            function () {
+            }
+        );
+        $this->middleware->setOption('annotation_paths', 'ficticious path');
+
+        $this->middleware->setup();
+
+        $this->assertInstanceOf('Doctrine\\ORM\\EntityManager', $this->container->entityManager);
+    }
+
+    /**
+     * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setup
+     * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setupMetadataDriver
+     */
+    public function testAnnotationPathsSetup()
+    {
+        $this->middleware->setOption('annotation_paths', 'ficticious path');
+
+        $this->middleware->setup();
+
+        $this->assertInstanceOf('Doctrine\\ORM\\EntityManager', $this->container->entityManager);
+    }
+
+    /**
+     * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setup
+     * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setupMetadataDriver
+     */
+    public function testXmlPathsSetup()
+    {
+        $this->middleware->setOption('xml_paths', dirname(__DIR__) . '/files/fakeAnnotationFile.php');
+
+        $this->middleware->setup();
+
+        $this->assertInstanceOf('Doctrine\\ORM\\EntityManager', $this->container->entityManager);
+    }
+
+    /**
+     * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setup
+     * @covers Jgut\Slim\Middleware\DoctrineMiddleware::setupMetadataDriver
+     */
+    public function testYamlPathsSetup()
+    {
+        $this->middleware->setOption('yaml_paths', dirname(__DIR__) . '/files/fakeAnnotationFile.php');
+
+        $this->middleware->setup();
+
+        $this->assertInstanceOf('Doctrine\\ORM\\EntityManager', $this->container->entityManager);
     }
 }

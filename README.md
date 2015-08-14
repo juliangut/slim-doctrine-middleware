@@ -45,6 +45,7 @@ There are two ways to configure Doctrine Middleware
 First by using `doctrine` key in Slim application configuration
 
 ```php
+// Minimun configuration
 $config = [
     'doctrine' => [
         'connection' => [
@@ -76,15 +77,21 @@ $app->add($doctrineMiddleware);
 ### Available configurations
 
 * `connection` array of PDO configurations
-* `annotation_paths` array of paths where to find entities files
+* `cache_driver` array with Doctrine cache configurations
+    * `type` string representing cache type, `apc`, `xcache`, `memcache`, `redis` or `array`
+    * `host` string representing caching daemon host, needed for `memcache` and `redis`, defaults to '127.0.0.1'
+    * `port` string representing caching daemon port, optionally available for `memcache` (defaults to 11211) and `redis` (defaults to 6379)
+* `proxy_path` path were Doctrine creates its proxy classes, defaults to /tmp
 * `annotation_files` array of Doctrine annotations files
 * `annotation_namespaces` array of Doctrine annotations namespaces
-* `annotation_autoloaders` array of Doctrine annotations autoloaders
-* `cache_driver` array, configuration of Doctrine cache
-    * `type` type of cache you want to use, available types: `apc`, `xcache`, `memcache`, `redis`, `array`
-    * `host` host of the caching daemon, needed for `memcache`, `redis`, defaults to '127.0.0.1'
-    * `port` port of the caching daemon, optional, available for `memcache` (defaults to 11211), `redis` (defaults to 6379)
-* `proxy_path` string, path were Doctrine creates it's proxy classes, defaults to /tmp
+* `annotation_autoloaders` array of Doctrine annotations autoloader callables
+* `annotation_paths` array of paths where to find annotated entity files
+* `xml_paths` array of paths where to find XML entity mapping files
+* `yaml_paths` array of paths where to find YAML entity mapping files
+
+#### Note:
+
+`annotation_paths`, `xml_paths` or `yaml_paths` is needed by Doctrine to include a Metadata Driver
 
 ## Contributing
 
