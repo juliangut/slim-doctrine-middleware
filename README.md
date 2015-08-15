@@ -1,9 +1,10 @@
-[![Build Status](https://travis-ci.org/juliangut/slim-doctrine-middleware.svg?branch=master)](https://travis-ci.org/juliangut/slim-doctrine-middleware)
-[![Code Climate](https://codeclimate.com/github/juliangut/slim-doctrine-middleware/badges/gpa.svg)](https://codeclimate.com/github/juliangut/slim-doctrine-middleware)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/juliangut/slim-doctrine-middleware/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/juliangut/slim-doctrine-middleware/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/juliangut/slim-doctrine-middleware/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/juliangut/slim-doctrine-middleware/?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/juliangut/slim-doctrine-middleware/v/stable.svg)](https://packagist.org/packages/juliangut/slim-doctrine-middleware)
-[![Total Downloads](https://poser.pugx.org/juliangut/slim-doctrine-middleware/downloads.svg)](https://packagist.org/packages/juliangut/slim-doctrine-middleware)
+[![Latest Version](https://img.shields.io/packagist/vpre/juliangut/slim-doctrine-middleware.svg?style=flat-square)](https://packagist.org/packages/juliangut/slim-doctrine-middleware)
+[![License](https://img.shields.io/packagist/l/juliangut/slim-doctrine-middleware.svg?style=flat-square)](https://github.com/juliangut/slim-doctrine-middleware/blob/master/LICENSE)
+
+[![Build status](https://img.shields.io/travis/juliangut/slim-doctrine-middleware.svg?style=flat-square)](https://travis-ci.org/juliangut/slim-doctrine-middleware)
+[![Code Quality](https://img.shields.io/scrutinizer/g/juliangut/slim-doctrine-middleware.svg?style=flat-square)](https://scrutinizer-ci.com/g/juliangut/slim-doctrine-middleware)
+[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/juliangut/slim-doctrine-middleware.svg?style=flat-square)](https://scrutinizer-ci.com/g/juliangut/slim-doctrine-middleware)
+[![Total Downloads](https://img.shields.io/packagist/dt/juliangut/slim-doctrine-middleware.svg?style=flat-square)](https://packagist.org/packages/juliangut/slim-doctrine-middleware)
 
 # Juliangut Slim Framework Doctrine handler middleware
 
