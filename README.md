@@ -89,6 +89,7 @@ $app->add($doctrineMiddleware);
 * `annotation_paths` array of paths where to find annotated entity files
 * `xml_paths` array of paths where to find XML entity mapping files
 * `yaml_paths` array of paths where to find YAML entity mapping files
+* `auto_generate_proxies` bool indicating whether Doctrine should auto-generate missing proxies
 
 #### Note:
 

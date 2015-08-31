@@ -113,6 +113,7 @@ class DoctrineMiddleware extends Middleware
         if (!$this->setupMetadataDriver($config)) {
             throw new \RuntimeException('No Metadata Driver defined');
         }
+        $config->setAutoGenerateProxyClasses($this->getOption('auto_generate_proxies', true) ? true : false);
 
         $connection = $this->getOption('connection');
 
