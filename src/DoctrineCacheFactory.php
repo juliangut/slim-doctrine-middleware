@@ -13,7 +13,7 @@ class DoctrineCacheFactory
     /**
      * @param array $cacheDriver
      *
-     * @return \Doctrine\Common\Cache\CacheProvider
+     * @return \Doctrine\Common\Cache\Cache
      */
     public static function configureCache($cacheDriver)
     {
