@@ -9,8 +9,9 @@ php:
 matrix:
   fast_finish: true
   allow_failures:
-    - php: hhvm
-    - php: 7.0
+    - php:
+      - hhvm
+      - 7.0
 
 install:
   - travis_retry composer self-update
