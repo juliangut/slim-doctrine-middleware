@@ -101,6 +101,12 @@ Found a bug or have a feature request? [Please open a new issue](https://github.
 
 See file [CONTRIBUTING.md](https://github.com/juliangut/slim-doctrine-middleware/blob/master/CONTRIBUTING.md)
 
+### Contributors
+
+* [@fousheezy (John Foushee)](https://github.com/fousheezy)
+* [@mcrauwel (Matthias Crauwels)](https://github.com/mcrauwel)
+* [@mgersten (Micah Gersten)](https://github.com/mgersten)
+
 ## License
 
 ### Release under BSD-3-Clause License.
