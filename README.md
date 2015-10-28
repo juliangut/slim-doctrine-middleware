@@ -10,6 +10,9 @@
 
 Doctrine handler middleware for Slim Framework.
 
+> ### Slim3 version
+> Doctrine integration service for Slim3 can be found in its own repository [juliangut/slim-doctrine](https://github.com/juliangut/slim-doctrine)
+
 ## Installation
 
 Best way to install is using [Composer](https://getcomposer.org/):
